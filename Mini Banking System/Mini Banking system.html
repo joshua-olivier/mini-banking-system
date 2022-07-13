@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+
+<head>
+    <title>Banking System</title>
+</head>
+
+<body>
+    <h1>Mini Banking System</h1>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <h3>Enter your current amount ($)</h3>
+    <div class="my-form" id="myForm">
+        <form>
+            <div class="form-group" style="margin-left:70px;">
+                <label><br>Amount $</label>
+                <input type="number" id="amount" name="amount">
+            </div>
+            <div class="form-group" style="margin-left: 70px;">
+                <br>
+                <label>Account</label>
+                <select id="account" name="account" style=>
+                    <option value="chequing">Chequing</option>
+                    <option value="savings">Savings</option>
+                    <option value="resp">RESP</option>
+                    <option value="rrsp">RRSP</option>
+                </select>
+            </div>
+        </form>
+    </div>
+    <div class="first-row-buttons" style="margin-left: 70px;">
+        <br>
+        <button type="button" onclick="showBalance()">Balance</button>
+        <button type="button" onclick="deposit()">Deposit</button>
+        <button type="button" onclick="withdraw()">Withdraw</button>
+        <button type="button" onclick="showForecast()">Forecast</button>
+    </div>
+    <p id="balanceMessage"></p>
+    <script>
+        "use strict"
+        let chequingBalance = 800;
+        let savingsBalance = 1000;
+        let respBalance = 1600;
+        let rrspBalance = 1000;
+        let respReturnRate = 4.4;
+        let rrspReturnRate = 6;
+
+        function showBalance() {
+            /*Question 1: Add code to show the balances of each account.*/
+            document.getElementById("balanceMessage").innerHTML = chequingBalance + savingsBalance + respBalance + rrspBalance
+        }
+
+        function deposit() { //dtermines which account to deposit into and calls the function that calculates new balance
+            let inputAccount = document.getElementById("account").value;
+            let newBalanceMessage;
+            if (inputAccount == "chequing") {
+                newBalanceMessage = depositInChequing(document.getElementById("amount").value);
+            } else if (inputAccount == "savings") {
+                newBalanceMessage = depositInSavings(document.getElementById("amount").value);
+            } else if (inputAccount == "resp") {
+                newBalanceMessage = depositInRESP(document.getElementById("amount").value);
+            } else {
+                newBalanceMessage = depositInRRSP(document.getElementById("amount").value);
+            }
+            document.getElementById("balanceMessage").innerHTML = newBalanceMessage
+        }
+
+        function withdraw() {
+            /*Question 3*/
+            let inputAccount = document.getElementById("account").value;
+            let newBalanceMessage;
+            if (inputAccount == "chequing") {
+                newBalanceMessage = withdrawFromChequing(document.getElementById("amount").value);
+            } else if (inputAccount == "savings") {
+                newBalanceMessage = withdrawFromSavings(document.getElementById("amount").value);
+            } else if (inputAccount == "resp") {
+                newBalanceMessage = withdrawFromRESP(document.getElementById("amount").value);
+            } else {
+                newBalanceMessage = withdrawFromRRSP(document.getElementById("amount").value);
+            }
+            document.getElementById("balanceMessage").innerHTML = newBalanceMessage;
+        }
+
+        function showForecast() {
+            let inputAccount = document.getElementById("amount").value;
+            let newBalanceMessage;
+            if (inputAccount == "chequing" || inputAccount == "savings") {
+                newBalanceMessage = "We do not provide investment for that account."
+            } else if (inputAccount == "resp") {
+                newBalanceMessage = forecastRESP();
+            } else {
+                newBalanceMessage = forecastRRSP();
+            }
+            document.getElementById("balanceMessage").innerHTML = newBalanceMessage;
+        }
+
+        function depositInChequing(amountToDeposit) {
+            chequingBalance = chequingBalance + Number(amountToDeposit);
+            return "The new chequing balance : $" + chequingBalance.toFixed(2);
+        }
+
+        //adds funds to the savings account
+        function depositInSavings(amountToDeposit) {
+            /*Question 2*/
+            savingsBalance = savingsBalance + Number(amountToDeposit);
+            return "The new savings balance : $" + savingsBalance.toFixed(2)
+        }
+
+        //adds funds to the resp account
+        function depositInRESP(amountToDeposit) {
+            /*Question 2*/
+            respBalance = respBalance + Number(amountToDeposit);
+            return "The new RESP balance : $" + respBalance.toFixed(2)
+        }
+
+        //adds funds to the rrsp account
+        function depositInRRSP(amountToDeposit) {
+            /*Question 2*/
+            rrspBalance = rrspBalance + Number(amountToDeposit);
+            return "The new RRSP balance : $" + rrspBalance.toFixed(2)
+        }
+
+        function withdrawFromChequing(amountToWithdraw) {
+            /*Question 3*/
+            chequingBalance -= amountToWithdraw;
+            let newBalanceMessage;
+        }
+
+        function withdrawFromSavings(amountToWithdraw) {
+            /*Question 3*/
+            savingsBalance -= amountToWithdraw;
+            let newBalanceMessage;
+        }
+
+        function withdrawFromRESP(amountToWithdraw) {
+            /*Question 3*/
+            RESPBalance -= amountToWithdraw;
+            let newBalanceMessage;
+        }
+
+        function withdrawFromRRSP(amountToWithdraw) {
+            /*Question 3*/
+            RRSPBalance -= amountToWithdraw;
+            let newBalanceMessage;
+        }
+
+        function forecastRESP() {
+            /*Question 4*/
+            //ask how many years
+            let years = Number(prompt("How many years is in the future?"));
+            let temp = respBalance;
+            for (let x = 0; x < years; x++) {
+                temp *= 1 + (respReturnRate / 100);
+            }
+            //print out the forecast
+            document.getElementById("balanceMessage").innerHTML = "In " + years + " " + "years, you will have $" + temp.toFixed(2) + "in your RESP";
+        }
+
+        function forecastRRSP() {
+            /*Question 4*/
+            //ask how many years
+            let years = Number(prompt("How many years is in the future?"));
+            let temp = rrspBalance;
+            for (let x = 0; x < years; x++) {
+                temp *= 1 + (rrspReturnRate / 100);
+            }
+            //print out the forecast
+            return ("In " + " " + years + "years, you will have $" + temp.toFixed(2) + " in your RRSP");
+        }
+    </script>
+</body>
+
+<body>
+    <br>
+    <br>
+    <br>
+    <br>
+    <h4>Desciption</h4>
+    <p>
+        <img src="picture.png" width="260" height="260">
+
+        A banking system is a network of
+        institutions that provide financial services to existing
+        and new bankers. These institutions are responsible for
+        operating a payment system, making loans, accepting deposits
+        and assisting with investments. In this banking system, I included
+        the Chequing, Savings, RESP (Registered Education Services Plan),
+        and the RRSP (Registered Retirement Savings Plan) accounts. I think
+        this tool would be very helpful for all bankers because it reduces
+        the cost of obtaining information about both savings and borrowing
+        opportunities. It makes the overall
+        economy more efficient for them.
+        <br>
+        <br>
+    </p>
+</body>
+
+</html>
